@@ -52,7 +52,11 @@ def add_account(account_type,balance,user_id):
     return "Account created for user "+ username +" added"
 
 
-def get_accounts(account_id):
+def get_accounts(account_id,current_user):
+    user_id = Account.query.filter_by(account_id=account_id).first().user_id
+    if current_user != User.query.filter_by(user_id=user_id).first().username:
+        return "You are not authorized to view this account"
+    
     accounts = Account.query.filter_by(account_id=account_id).all()
     if accounts:
         return jsonify(
@@ -181,3 +185,10 @@ def delete_user_details(user_id):
         return "User deleted"
     else:
         return "No user found"
+
+def verify_credentials(username, password):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return user.password == password
+    else:
+        return False
