@@ -50,7 +50,7 @@ def account():
         balance = 0
         return add_account(account_type,balance,user_id)
 
-@app.route('/get_acc' , methods=['POST'])
+@app.route('/get_acc' , methods=['GET'])
 def get_acc():
     data = request.get_json()
     account_id = data['account_id']
@@ -77,6 +77,21 @@ def transfer():
     to_acc = data['to_acc']
     amount = data['amount']
     return transfer_amount(from_acc,to_acc,amount)
+
+@app.route('/update_user' , methods=['PUT'])
+def update_user():
+    data = request.get_json()
+    credentials_type = data['credentials_type']
+    credentials = data['credentials']
+    user_id = data['user_id']
+    return update_user_details(credentials_type,credentials,user_id)
+
+@app.route('/delete_user' , methods=['DELETE'])
+def delete_user():
+    data = request.get_json()
+    user_id = data['user_id']
+    return delete_user_details(user_id)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -136,3 +136,48 @@ def transfer_amount(sender_account_id,receiver_account_id,amount):
             return "Insufficient balance"
     else:
         return "No account found"
+    
+def update_user_details(credentials_type,credentials,user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    if user:
+        if credentials_type == "username":
+            user.username = credentials
+        elif credentials_type == "password":
+            user.password = credentials
+        elif credentials_type == "email":
+            user.email = credentials
+        elif credentials_type == "first_name":
+            user.first_name = credentials
+        elif credentials_type == "last_name":
+            user.last_name = credentials
+        elif credentials_type == "date_of_birth":
+            user.date_of_birth = credentials
+        elif credentials_type == "address":
+            user.address = credentials
+        elif credentials_type == "phone_number":
+            user.phone_number = credentials
+        else:
+            return "Invalid credentials type"
+        db.session.commit()
+        return jsonify({
+            'user_id': user.user_id,
+            'username': user.username,
+            'password': user.password,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'date_of_birth': user.date_of_birth,
+            'address': user.address,
+            'phone_number': user.phone_number
+        })
+    else:
+        return "No user found"
+
+def delete_user_details(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return "User deleted"
+    else:
+        return "No user found"
